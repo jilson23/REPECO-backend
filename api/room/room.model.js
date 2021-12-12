@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const roomSchema = mongoose.Schema({
+const RoomSchema = mongoose.Schema({
     id: {
       type: Number,
       required: true  
@@ -20,11 +20,7 @@ const roomSchema = mongoose.Schema({
     images: {
         type: Array,
         required: true
-    },
-    address: {
-        type: Object,
-        required: true
-    },
+    },    
     tags: {
         type: Array,
         required: false
@@ -32,9 +28,23 @@ const roomSchema = mongoose.Schema({
     price: {
         type: Number,
         required: true
-    },     
+    },  
+    
+    hotel: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Hotel',
+        required: true
+    },
+
+    reserves: [
+        {
+         type: mongoose.Schema.Types.ObjectId,
+         ref: 'Reserve'
+        }
+    ]
+
 }, {
     timestamps: true
 });
 
-module.exports = mongoose.model('Room', roomSchema);
+module.exports = mongoose.model('Room', RoomSchema);
