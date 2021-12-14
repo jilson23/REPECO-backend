@@ -3,15 +3,17 @@ const isEmail = require('validator').isEmail
 
 const UserSchema = new mongoose.Schema({
     email: {
+        type: String,
         required: true,
         validate: isEmail
     },
     password: {
+        type: String,
         required: true,
         minlength: 8,
         maxlength: 30
     },
-    name: {
+    firstName: {
         type: String,         
     },
     lastname: {
@@ -27,15 +29,18 @@ const UserSchema = new mongoose.Schema({
         maxlength: 8,
     
     },
-    rol: {
-        type:Number,
+    role: {
+        enum:['client', 'hotel', 'administrator'],
         required: true,
-        default: 0
-        /* 
-        0=='client'
-        1=='hotel administrator'
-        2=='system administrator'
-        */
+        default: 'client'
+    },
+    cart: {
+        type: Array
+    },
+    //en duda
+    isActive: {
+        type: Boolean,
+        default: true
     },
 
     hotel: {
@@ -47,6 +52,12 @@ const UserSchema = new mongoose.Schema({
         {
          type: mongoose.Schema.Types.ObjectId,
          ref: 'Reserve'
+        }
+    ],
+    invoice: [
+        {
+         type: mongoose.Schema.Types.ObjectId,
+         ref: 'Invoice'
         }
     ]
 })
