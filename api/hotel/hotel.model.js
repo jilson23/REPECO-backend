@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const config = require('../../config')
 
 const HotelSchema = new mongoose.Schema({
   name: {
@@ -7,7 +8,7 @@ const HotelSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    enum: ['Hotel', 'Hospedaje', 'Hostal', 'Posada', 'Otro']
+    enum: config.hotelCategory,
   },
   address: {
     type: String,
@@ -23,19 +24,25 @@ const HotelSchema = new mongoose.Schema({
     country: {
       type: String
     }
-
+  },
+  phone: {
+    type: String,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
   },
   rooms: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Room',
     }
-  ],
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-  }
+  ]
 })
 
 module.exports = mongoose.model('Hotel', HotelSchema)

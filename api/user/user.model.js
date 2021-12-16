@@ -53,6 +53,12 @@ const UserSchema = new mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Reserve'
       }
+    ],
+    invoices: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Invoice'
+      }
     ]
   },
   {

@@ -17,6 +17,8 @@ const all = {
   },
 
   userRoles: ['client', 'hotel', 'admin'],
+
+  hotelCategory: ['Hotel', 'Hospedaje', 'Hostal', 'Posada', 'Departamento', 'Otro'],
 };
 
 module.exports = all;

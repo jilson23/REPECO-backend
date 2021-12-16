@@ -2,18 +2,27 @@ const mongoose = require('mongoose')
 
 const InvoiceSchema = new mongoose.Schema({
   subtotal: {
-    type: Array,
-    prices: [],
+    type: Number,
     required: true
   },
   totalPrice: {
-    type: Number
+    type: Number,
+    required: true
   },
-
-  reserve: {
+  invoiceNumber: {
+    type: Number,
+    required: true
+  },
+  rooms: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Room',
+    }
+  ],
+  user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Reserve'
-  }
+    ref: 'User',
+  },
 
 })
 
