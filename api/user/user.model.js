@@ -1,65 +1,69 @@
 const mongoose = require('mongoose');
-const isEmail = require('validator').isEmail
+// const isEmail = require('validator').isEmail;
+const config = require('../../config')
 
-const UserSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema(
+  {
     email: {
-        type: String,
-        required: true,
-        validate: isEmail
+      type: String,
+      required: true,
+    // validate: isEmail
     },
     password: {
-        type: String,
-        required: true,
-        minlength: 8,
-        maxlength: 30
+      type: String,
+      required: true,
+      minlength: 8,
+      maxlength: 30
     },
     firstName: {
-        type: String,         
+      type: String,
     },
     lastname: {
-        type: String,
+      type: String,
 
     },
     phone: {
-        type:String,
-        validate: isMobilePhone('esPE')
+      type: String,
+    // validate: isMobilePhone('esPE')
     },
     document: {
-        type:String,
-        maxlength: 8,
-    
+      type: String,
+      maxlength: 8,
+
     },
     role: {
-        enum:['client', 'hotel', 'administrator'],
-        required: true,
-        default: 'client'
+      type: String,
+      required: true,
+      enum: config.userRoles,
+      default: 'client',
     },
-    cart: {
-        type: Array
+    active: {
+      type: Boolean,
+      default: false,
     },
-    //en duda
-    isActive: {
-        type: Boolean,
-        default: true
+    passwordResetToken: String,
+    passwordResetExpires: Date,
+    hotel: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Hotel'
     },
 
-    hotel: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Hotel'
-    },   
-    
     reserves: [
-        {
-         type: mongoose.Schema.Types.ObjectId,
-         ref: 'Reserve'
-        }
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Reserve'
+      }
     ],
-    invoice: [
-        {
-         type: mongoose.Schema.Types.ObjectId,
-         ref: 'Invoice'
-        }
+    invoices: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Invoice'
+      }
     ]
-})
+  },
+  {
+    timestamps: true,
+  },
+)
 
 module.exports = mongoose.model('User', UserSchema)

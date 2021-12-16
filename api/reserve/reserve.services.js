@@ -3,15 +3,11 @@ const Reserve = require('./reserve.model');
 /**
  * Get all reserves
  * @returns all reserves
- */ 
+ */
 
 async function getAllReserves() {
-    try {
-      const reserves = await Reserve.find();
-      return reserves;
-    } catch (error) {
-      throw error;
-    }
+  const reserves = await Reserve.find();
+  return reserves;
 }
 
 /**
@@ -20,12 +16,8 @@ async function getAllReserves() {
  * @returns reserve
 */
 async function getReserveById(id) {
-  try {
-    const reserve = await Reserve.findById(id);
-    return reserve;
-  } catch (error) {
-    throw error;
-  }
+  const reserve = await Reserve.findById(id);
+  return reserve;
 }
 
 /**
@@ -33,14 +25,10 @@ async function getReserveById(id) {
  * @param {Object} reserve Reserve to create
  * @returns Reserve created
  */
- async function createReserve(reserve) {
-  try {
-    const newReserve = new Reserve(reserve);
-    const savedReserve = await newReserve.save();
-    return savedReserve;
-  } catch (error) {
-    throw error;
-  }
+async function createReserve(reserve) {
+  const newReserve = new Reserve(reserve);
+  const savedReserve = await newReserve.save();
+  return savedReserve;
 }
 
 /**
@@ -49,13 +37,9 @@ async function getReserveById(id) {
  * @param {*} reserve Body of the reserve to be updated
  * @returns reserve updated
  */
- async function updateReserve(id, reserve) {
-  try {
-    const updatedReserve = await Reserve.findByIdAndUpdate(id, reserve);
-    return updatedReserve;
-  } catch (error) {
-    throw error;
-  }
+async function updateReserve(id, reserve) {
+  const updatedReserve = await Reserve.findByIdAndUpdate(id, reserve);
+  return updatedReserve;
 }
 
 /**
@@ -64,12 +48,8 @@ async function getReserveById(id) {
  * @returns Reserve deleted
  */
 async function deleteReserve(id) {
-  try {
-    const deletedReserve = await Reserve.findByIdAndDelete(id);
-    return deletedReserve;
-  } catch (error) {
-    throw error;
-  }
+  const deletedReserve = await Reserve.findByIdAndDelete(id);
+  return deletedReserve;
 }
 
 module.exports = {

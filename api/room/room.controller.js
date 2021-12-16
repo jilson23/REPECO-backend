@@ -1,20 +1,19 @@
-const { 
-  createRoom, 
-  deleteRoom, 
-  getAllRooms, 
-  getRoomById, 
-  updateRoom 
+const {
+  createRoom,
+  deleteRoom,
+  getAllRooms,
+  getRoomById,
+  updateRoom
 } = require('./room.service')
 
-async function getAllRoomsHandler(req, res){
+async function getAllRoomsHandler(req, res) {
   try {
     const rooms = await getAllRooms();
     return res.status(200).json(rooms)
   } catch (error) {
-    return res.status(500).json({error: error.message})
+    return res.status(500).json({ error: error.message })
   }
 }
-
 
 async function getRoomByIdHandler(req, res) {
   const { id } = req.params;

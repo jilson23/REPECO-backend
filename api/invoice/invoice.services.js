@@ -3,15 +3,11 @@ const Invoice = require('./invoice.model');
 /**
  * Get all invoices
  * @returns all invoices
- */ 
+ */
 
 async function getAllInvoices() {
-    try {
-      const invoices = await Invoice.find();
-      return invoices;
-    } catch (error) {
-      throw error;
-    }
+  const invoices = await Invoice.find();
+  return invoices;
 }
 
 /**
@@ -20,12 +16,8 @@ async function getAllInvoices() {
  * @returns invoice
 */
 async function getInvoiceById(id) {
-  try {
-    const invoice = await Invoice.findById(id);
-    return invoice;
-  } catch (error) {
-    throw error;
-  }
+  const invoice = await Invoice.findById(id);
+  return invoice;
 }
 
 /**
@@ -33,14 +25,10 @@ async function getInvoiceById(id) {
  * @param {Object} invoice Invoice to create
  * @returns Invoice created
  */
- async function createInvoice(invoice) {
-  try {
-    const newInvoice = new Invoice(invoice);
-    const savedInvoice = await newInvoice.save();
-    return savedInvoice;
-  } catch (error) {
-    throw error;
-  }
+async function createInvoice(invoice) {
+  const newInvoice = new Invoice(invoice);
+  const savedInvoice = await newInvoice.save();
+  return savedInvoice;
 }
 
 /**
@@ -49,13 +37,9 @@ async function getInvoiceById(id) {
  * @param {*} invoice Body of the invoice to be updated
  * @returns invoice updated
  */
- async function updateInvoice(id, invoice) {
-  try {
-    const updatedInvoice = await Invoice.findByIdAndUpdate(id, invoice);
-    return updatedInvoice;
-  } catch (error) {
-    throw error;
-  }
+async function updateInvoice(id, invoice) {
+  const updatedInvoice = await Invoice.findByIdAndUpdate(id, invoice);
+  return updatedInvoice;
 }
 
 /**
@@ -64,12 +48,8 @@ async function getInvoiceById(id) {
  * @returns Invoice deleted
  */
 async function deleteInvoice(id) {
-  try {
-    const deletedInvoice = await Invoice.findByIdAndDelete(id);
-    return deletedInvoice;
-  } catch (error) {
-    throw error;
-  }
+  const deletedInvoice = await Invoice.findByIdAndDelete(id);
+  return deletedInvoice;
 }
 
 module.exports = {
