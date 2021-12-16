@@ -1,37 +1,41 @@
 const mongoose = require('mongoose')
 
 const HotelSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
+  name: {
+    type: String,
+    required: true,
+  },
+  category: {
+    type: String,
+    enum: ['Hotel', 'Hospedaje', 'Hostal', 'Posada', 'Otro']
+  },
+  address: {
+    type: String,
+    city: {
+      type: String
     },
-    category:{
-        type: String,
-        enum: ['Hotel', 'Hospedaje', 'Hostal', 'Posada', 'Otro']
+    province: {
+      type: String
     },
-    address: {
-        type: String,
-        city: {
-            type: String
-        },
-        province: {
-            type: String
-        },
-        region: {
-            type: String
-        },
-        country: {
-            type: String
-        }   
-    
+    region: {
+      type: String
     },
-    rooms: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Room',
-        }
-    ]
-})
+    country: {
+      type: String
+    }
 
+  },
+  rooms: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Room',
+    }
+  ],
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  }
+})
 
 module.exports = mongoose.model('Hotel', HotelSchema)

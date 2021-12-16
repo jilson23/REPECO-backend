@@ -3,15 +3,11 @@ const User = require('./user.model');
 /**
  * Get all users
  * @returns all users
- */ 
+ */
 
 async function getAllUsers() {
-    try {
-      const users = await User.find();
-      return users;
-    } catch (error) {
-      throw error;
-    }
+  const users = await User.find({}, '-password');
+  return users;
 }
 
 /**
@@ -20,12 +16,18 @@ async function getAllUsers() {
  * @returns user
 */
 async function getUserById(id) {
-  try {
-    const user = await User.findById(id);
-    return user;
-  } catch (error) {
-    throw error;
-  }
+  const user = await User.findById(id);
+  return user;
+}
+
+/**
+ * Get user by query
+ * @param {string} query Indentifier of the note to be filtered
+ * @returns user
+*/
+async function findOneUser(query) {
+  const user = await User.findOne(query);
+  return user;
 }
 
 /**
@@ -33,14 +35,9 @@ async function getUserById(id) {
  * @param {Object} user User to create
  * @returns User created
  */
- async function createUser(user) {
-  try {
-    const newUser = new User(user);
-    const savedUser = await newUser.save();
-    return savedUser;
-  } catch (error) {
-    throw error;
-  }
+async function createUser(user) {
+  const newUser = await User.create(user);
+  return newUser;
 }
 
 /**
@@ -49,13 +46,9 @@ async function getUserById(id) {
  * @param {*} user Body of the user to be updated
  * @returns user updated
  */
- async function updateUser(id, user) {
-  try {
-    const updatedUser = await User.findByIdAndUpdate(id, user);
-    return updatedUser;
-  } catch (error) {
-    throw error;
-  }
+async function updateUser(id, user) {
+  const updatedUser = await User.findByIdAndUpdate(id, user, { new: true });
+  return updatedUser;
 }
 
 /**
@@ -64,12 +57,8 @@ async function getUserById(id) {
  * @returns User deleted
  */
 async function deleteUser(id) {
-  try {
-    const deletedUser = await User.findByIdAndDelete(id);
-    return deletedUser;
-  } catch (error) {
-    throw error;
-  }
+  const deletedUser = await User.findByIdAndDelete(id);
+  return deletedUser;
 }
 
 module.exports = {
@@ -77,5 +66,6 @@ module.exports = {
   deleteUser,
   getAllUsers,
   getUserById,
+  findOneUser,
   updateUser,
 };

@@ -1,54 +1,63 @@
 const mongoose = require('mongoose');
-const isEmail = require('validator').isEmail
+// const isEmail = require('validator').isEmail;
+const config = require('../../config')
 
-const UserSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema(
+  {
     email: {
-        required: true,
-        validate: isEmail
+      type: String,
+      required: true,
+    // validate: isEmail
     },
     password: {
-        required: true,
-        minlength: 8,
-        maxlength: 30
+      type: String,
+      required: true,
+      minlength: 8,
+      maxlength: 30
     },
-    name: {
-        type: String,         
+    firstName: {
+      type: String,
     },
     lastname: {
-        type: String,
+      type: String,
 
     },
     phone: {
-        type:String,
-        validate: isMobilePhone('esPE')
+      type: String,
+    // validate: isMobilePhone('esPE')
     },
     document: {
-        type:String,
-        maxlength: 8,
-    
+      type: String,
+      maxlength: 8,
+
     },
-    rol: {
-        type:Number,
-        required: true,
-        default: 0
-        /* 
-        0=='client'
-        1=='hotel administrator'
-        2=='system administrator'
-        */
+    role: {
+      type: String,
+      required: true,
+      enum: config.userRoles,
+      default: 'client',
+    },
+    active: {
+      type: Boolean,
+      default: false,
+    },
+    passwordResetToken: String,
+    passwordResetExpires: Date,
+    hotel: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Hotel'
     },
 
-    hotel: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Hotel'
-    },   
-    
     reserves: [
-        {
-         type: mongoose.Schema.Types.ObjectId,
-         ref: 'Reserve'
-        }
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Reserve'
+      }
     ]
-})
+  },
+  {
+    timestamps: true,
+  },
+)
 
 module.exports = mongoose.model('User', UserSchema)

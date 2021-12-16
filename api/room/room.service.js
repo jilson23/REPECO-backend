@@ -3,15 +3,11 @@ const Room = require('./room.model');
 /**
  * Get all rooms
  * @returns all rooms
- */ 
+ */
 
 async function getAllRooms() {
-    try {
-      const rooms = await Room.find();
-      return rooms;
-    } catch (error) {
-      throw error;
-    }
+  const rooms = await Room.find();
+  return rooms;
 }
 
 /**
@@ -20,12 +16,8 @@ async function getAllRooms() {
  * @returns room
 */
 async function getRoomById(id) {
-  try {
-    const room = await Room.findById(id);
-    return room;
-  } catch (error) {
-    throw error;
-  }
+  const room = await Room.findById(id);
+  return room;
 }
 
 /**
@@ -33,14 +25,10 @@ async function getRoomById(id) {
  * @param {Object} room Room to create
  * @returns Room created
  */
- async function createRoom(room) {
-  try {
-    const newRoom = new Room(room);
-    const savedRoom = await newRoom.save();
-    return savedRoom;
-  } catch (error) {
-    throw error;
-  }
+async function createRoom(room) {
+  const newRoom = new Room(room);
+  const savedRoom = await newRoom.save();
+  return savedRoom;
 }
 
 /**
@@ -49,13 +37,9 @@ async function getRoomById(id) {
  * @param {*} room Body of the room to be updated
  * @returns room updated
  */
- async function updateRoom(id, room) {
-  try {
-    const updatedRoom = await Room.findByIdAndUpdate(id, room);
-    return updatedRoom;
-  } catch (error) {
-    throw error;
-  }
+async function updateRoom(id, room) {
+  const updatedRoom = await Room.findByIdAndUpdate(id, room);
+  return updatedRoom;
 }
 
 /**
@@ -64,12 +48,8 @@ async function getRoomById(id) {
  * @returns Room deleted
  */
 async function deleteRoom(id) {
-  try {
-    const deletedRoom = await Room.findByIdAndDelete(id);
-    return deletedRoom;
-  } catch (error) {
-    throw error;
-  }
+  const deletedRoom = await Room.findByIdAndDelete(id);
+  return deletedRoom;
 }
 
 module.exports = {

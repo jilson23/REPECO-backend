@@ -3,15 +3,11 @@ const Hotel = require('./hotel.model');
 /**
  * Get all hotels
  * @returns all hotels
- */ 
+ */
 
 async function getAllHotels() {
-    try {
-      const hotels = await Hotel.find();
-      return hotels;
-    } catch (error) {
-      throw error;
-    }
+  const hotels = await Hotel.find();
+  return hotels;
 }
 
 /**
@@ -20,12 +16,8 @@ async function getAllHotels() {
  * @returns hotel
 */
 async function getHotelById(id) {
-  try {
-    const hotel = await Hotel.findById(id);
-    return hotel;
-  } catch (error) {
-    throw error;
-  }
+  const hotel = await Hotel.findById(id);
+  return hotel;
 }
 
 /**
@@ -33,14 +25,10 @@ async function getHotelById(id) {
  * @param {Object} hotel Hotel to create
  * @returns Hotel created
  */
- async function createHotel(hotel) {
-  try {
-    const newHotel = new Hotel(hotel);
-    const savedHotel = await newHotel.save();
-    return savedHotel;
-  } catch (error) {
-    throw error;
-  }
+async function createHotel(hotel) {
+  const newHotel = new Hotel(hotel);
+  const savedHotel = await newHotel.save();
+  return savedHotel;
 }
 
 /**
@@ -49,13 +37,9 @@ async function getHotelById(id) {
  * @param {*} hotel Body of the hotel to be updated
  * @returns hotel updated
  */
- async function updateHotel(id, hotel) {
-  try {
-    const updatedHotel = await Hotel.findByIdAndUpdate(id, hotel);
-    return updatedHotel;
-  } catch (error) {
-    throw error;
-  }
+async function updateHotel(id, hotel) {
+  const updatedHotel = await Hotel.findByIdAndUpdate(id, hotel);
+  return updatedHotel;
 }
 
 /**
@@ -64,12 +48,8 @@ async function getHotelById(id) {
  * @returns Hotel deleted
  */
 async function deleteHotel(id) {
-  try {
-    const deletedHotel = await Hotel.findByIdAndDelete(id);
-    return deletedHotel;
-  } catch (error) {
-    throw error;
-  }
+  const deletedHotel = await Hotel.findByIdAndDelete(id);
+  return deletedHotel;
 }
 
 module.exports = {
