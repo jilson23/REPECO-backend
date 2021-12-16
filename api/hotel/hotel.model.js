@@ -7,7 +7,7 @@ const HotelSchema = new mongoose.Schema({
     },
     category:{
         type: String,
-        enum: ['Hotel', 'Hospedaje', 'Hostal', 'Posada', 'Otro']
+        enum: ['Hotel', 'Hospedaje', 'Hostal', 'Posada', 'Departamento', 'Otro']
     },
     address: {
         type: String,
@@ -22,8 +22,19 @@ const HotelSchema = new mongoose.Schema({
         },
         country: {
             type: String
-        }   
-    
+        }
+    },
+    phone:{
+        type: String,
+        required: true
+    },
+    email:{
+        type: String,
+        required: true
+    },
+    user:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
     },
     rooms: [
         {
