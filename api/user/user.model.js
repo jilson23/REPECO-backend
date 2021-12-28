@@ -18,7 +18,7 @@ const UserSchema = new mongoose.Schema(
     firstName: {
       type: String,
     },
-    lastname: {
+    lastName: {
       type: String,
 
     },
@@ -31,6 +31,12 @@ const UserSchema = new mongoose.Schema(
       maxlength: 8,
 
     },
+    cart: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Room',
+      }
+    ],
     role: {
       type: String,
       required: true,
@@ -43,23 +49,6 @@ const UserSchema = new mongoose.Schema(
     },
     passwordResetToken: String,
     passwordResetExpires: Date,
-    hotel: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Hotel'
-    },
-
-    reserves: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Reserve'
-      }
-    ],
-    invoices: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Invoice'
-      }
-    ]
   },
   {
     timestamps: true,

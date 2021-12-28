@@ -4,7 +4,7 @@ const {
   getAllHotels,
   getHotelById,
   updateHotel
-} = require('./hotel.service')
+} = require('./hotel.services')
 
 async function getAllHotelsHandler(req, res) {
   try {
