@@ -9,17 +9,20 @@ const ReserveSchema = new mongoose.Schema({
     type: Date,
     required: true
   },
-  state: {
-    enum: ['active', 'inactive'],
+  isProcesing: {
+    type: Boolean,
+    default: false,
     required: true
   },
   room: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Room'
+    ref: 'Room',
+    require: true,
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    require: true,
   }
 })
 

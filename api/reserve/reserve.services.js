@@ -20,6 +20,11 @@ async function getReserveById(id) {
   return reserve;
 }
 
+// async function getReserveByUser(user) {
+//   const reserves = await Reserve.find({ user });
+//   return reserves;
+// }
+
 /**
  * Create a new reserve
  * @param {Object} reserve Reserve to create

@@ -10,14 +10,28 @@ const RoomSchema = mongoose.Schema(
       type: String,
       required: true
     },
-    images: {
-      type: Array,
-      required: true
-    },
-    services: {
-      type: Array,
-      required: false
-    },
+    images: [
+      {
+        imageName: {
+          type: String,
+          require: true,
+        },
+        imageUrl: {
+          type: String,
+        }
+      }
+    ],
+    services: [
+      {
+        serviceName: {
+          type: String,
+          require: true,
+        },
+        serviceUrl: {
+          type: String,
+        }
+      }
+    ],
     price: {
       type: Number,
       required: true
@@ -31,17 +45,7 @@ const RoomSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Hotel',
       required: true
-    },
-    reserves: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Reserve'
-      }
-    ],
-    invoice: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Invoice',
-    },
+    }
   },
   {
     timestamps: true,
