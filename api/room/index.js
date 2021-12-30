@@ -8,13 +8,13 @@ const {
   updateRoomHandler,
 } = require('./room.controller');
 
-const { hasRole } = require('../../auth/auth.service');
+// const { hasRole } = require('../../auth/auth.service');
 
 const router = Router();
 
 router.get('/', getAllRoomsHandler);
 router.get('/:id', getRoomByIdHandler);
-router.post('/', hasRole(['hotel', 'admin']), createRoomHandler);
+router.post('/', createRoomHandler);
 router.patch('/:id', deleteRoomHandler);
 router.delete('/:id', updateRoomHandler);
 

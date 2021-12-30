@@ -26,14 +26,14 @@ function isAuthenticated() {
         const user = await findOneUser({ email: payload.email });
 
         if (!user) {
-          return res.status(401).end();
+          return res.status(401).end('Unauthorized');
         }
 
         req.user = user;
         next();
         return null;
       } else {
-        return res.status(401).end();
+        return res.status(401).end('Unauthorized');
       }
     } catch (error) {
       return next(error);
@@ -44,8 +44,8 @@ function isAuthenticated() {
 /**
  * Checks if the user role meets the minimum requirements of the route
  */
-function hasRole(roleRequired) {
-  if (!roleRequired) {
+function hasRole(roleRequired = []) {
+  if (!roleRequired.length) {
     throw new Error('Required role needs to be set');
   }
 
@@ -53,7 +53,7 @@ function hasRole(roleRequired) {
     .use(isAuthenticated())
     .use((req, res, next) => {
       const { role } = req.user;
-      if (roleRequired === role) {
+      if (roleRequired.includes(role)) {
         next();
       } else {
         res.status(403).send('Forbidden');

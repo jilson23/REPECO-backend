@@ -6,7 +6,7 @@ const Room = require('./room.model');
  */
 
 async function getAllRooms() {
-  const rooms = await Room.find();
+  const rooms = await Room.find().populate('hotel');
   return rooms;
 }
 
