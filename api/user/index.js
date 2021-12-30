@@ -6,14 +6,24 @@ const {
   getAllUsersHandler,
   getUserByIdHandler,
   updateUserHandler,
+  updateUserCartHandler
 } = require('./user.controller');
+
+const { UserSchema } = require('./user.schema')
+const validateRequest = require('../../middleware/validateRequest');
+const { hasRole, isAuthenticated } = require('../../auth/auth.service')
 
 const router = Router();
 
-router.get('/', getAllUsersHandler);
-router.post('/', createUserHandler);
-router.get('/:id', getUserByIdHandler);
-router.delete('/:id', updateUserHandler);
-router.patch('/:id', deleteUserHandler);
+router.get('/', hasRole(['admin']), getAllUsersHandler);
+router.post('/',
+  hasRole(['admin']),
+  validateRequest(UserSchema, 'body'),
+  createUserHandler
+);
+router.get('/:id', isAuthenticated(), getUserByIdHandler);
+router.delete('/:id', hasRole(['admin']), deleteUserHandler);
+router.patch('/:id', isAuthenticated(), updateUserHandler);
+router.patch('/cart/:id', isAuthenticated(), updateUserCartHandler);
 
 module.exports = router;

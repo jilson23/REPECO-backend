@@ -11,6 +11,9 @@ const HotelSchema = new mongoose.Schema({
     enum: config.hotelCategory,
   },
   address: {
+    street: {
+      type: String,
+    },
     city: {
       type: String
     },
@@ -35,6 +38,7 @@ const HotelSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
+    require: true,
   }
 })
 

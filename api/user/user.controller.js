@@ -3,7 +3,8 @@ const {
   deleteUser,
   getAllUsers,
   getUserById,
-  updateUser
+  updateUser,
+  findOneUser
 } = require('./user.service')
 
 async function getAllUsersHandler(req, res) {
@@ -32,11 +33,13 @@ async function getUserByIdHandler(req, res) {
 
 async function createUserHandler(req, res) {
   try {
-    const User = await createUser(req.body);
-    console.log(User)
-    res.status(201).json(User);
+    const userExists = await findOneUser({ email: req.body.email })
+    if (userExists) {
+      return res.status(409).json({ error: 'user already exists' })
+    }
+    const user = await createUser(req.body);
+    res.status(201).json(user);
   } catch (error) {
-    console.log(error)
     res.status(500).json({ error: error.message });
   }
 }
@@ -45,6 +48,23 @@ async function updateUserHandler(req, res) {
   const { id } = req.params;
   try {
     const user = await updateUser(id, req.body);
+
+    if (!user) {
+      return res.status(404).json({ message: `User not found with id: ${id}` });
+    }
+
+    return res.status(200).json(user);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
+
+async function updateUserCartHandler(req, res) {
+  const { id } = req.params; // RoomId
+  const userId = req.user;
+
+  try {
+    const user = await updateUser(userId, req.body);
 
     if (!user) {
       return res.status(404).json({ message: `User not found with id: ${id}` });
@@ -77,4 +97,5 @@ module.exports = {
   getAllUsersHandler,
   getUserByIdHandler,
   updateUserHandler,
+  updateUserCartHandler
 };
