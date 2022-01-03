@@ -82,8 +82,8 @@ UserSchema.methods.comparePassword = async function(candidatePassword) {
 // virtuals
 
 UserSchema.virtual('profile').get(function () {
-  const { firstName, lastName, email, role, cart } = this;
-  return { fullName: `${firstName.toUpperCase()} ${lastName.toUpperCase()}`, email, role, cart }
+  const { firstName, lastName, email, role } = this;
+  return { fullName: `${firstName.toUpperCase()} ${lastName.toUpperCase()}`, email, role }
 })
 
 module.exports = mongoose.model('User', UserSchema)

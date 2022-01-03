@@ -31,6 +31,21 @@ async function getUserByIdHandler(req, res) {
   }
 }
 
+async function getUserCartHandler(req, res) {
+  const { email } = req.user;
+  try {
+    const user = await findOneUser({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found ' });
+    }
+
+    return res.status(200).json(user.cart);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
+
 async function createUserHandler(req, res) {
   try {
     const userExists = await findOneUser({ email: req.body.email })
@@ -64,13 +79,19 @@ async function updateUserCartHandler(req, res) {
   const userId = req.user;
 
   try {
-    const user = await updateUser(userId, req.body);
+    const user = await getUserById(userId);
+    if (user.cart.includes(id)) {
+      return res.status(202).json({ message: 'The room is already added' })
+    }
+    user.cart.push(id)
 
-    if (!user) {
+    const updatedUser = await updateUser(userId, user);
+
+    if (!updatedUser) {
       return res.status(404).json({ message: `User not found with id: ${id}` });
     }
 
-    return res.status(200).json(user);
+    return res.status(200).json(updatedUser);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
@@ -97,5 +118,6 @@ module.exports = {
   getAllUsersHandler,
   getUserByIdHandler,
   updateUserHandler,
-  updateUserCartHandler
+  updateUserCartHandler,
+  getUserCartHandler
 };

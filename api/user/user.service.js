@@ -26,7 +26,7 @@ async function getUserById(id) {
  * @returns user
 */
 async function findOneUser(query) {
-  const user = await User.findOne(query);
+  const user = await User.findOne(query).populate({ path: 'cart', populate: { path: 'hotel' } });
   return user;
 }
 
