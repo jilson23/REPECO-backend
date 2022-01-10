@@ -16,16 +16,18 @@ const { hasRole, isAuthenticated } = require('../../auth/auth.service')
 
 const router = Router();
 
-router.get('/', hasRole(['admin']), getAllUsersHandler);
+router.get('/',
+// hasRole(['admin']),
+  getAllUsersHandler);
 router.post('/',
-  hasRole(['admin']),
+  // hasRole(['admin']),
   validateRequest(UserSchema, 'body'),
   createUserHandler
 );
 router.get('/cart/', isAuthenticated(), getUserCartHandler);
-router.get('/:id', isAuthenticated(), getUserByIdHandler);
+router.patch('/profile', isAuthenticated(), updateUserHandler);
+router.get('/profile', isAuthenticated(), getUserByIdHandler);
 router.delete('/:id', hasRole(['admin']), deleteUserHandler);
-router.patch('/:id', isAuthenticated(), updateUserHandler);
 router.patch('/cart/:id', isAuthenticated(), updateUserCartHandler);
 
 module.exports = router;
