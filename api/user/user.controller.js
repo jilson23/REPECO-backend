@@ -17,7 +17,7 @@ async function getAllUsersHandler(req, res) {
 }
 
 async function getUserByIdHandler(req, res) {
-  const { id } = req.params;
+  const id = req.user._id;
   try {
     const user = await getUserById(id);
 
@@ -60,7 +60,8 @@ async function createUserHandler(req, res) {
 }
 
 async function updateUserHandler(req, res) {
-  const { id } = req.params;
+  const id = req.user._id;
+
   try {
     const user = await updateUser(id, req.body);
 
