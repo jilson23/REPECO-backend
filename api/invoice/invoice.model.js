@@ -13,10 +13,10 @@ const InvoiceSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  reserves: [
+  rooms: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Reserve',
+      ref: 'Room',
       required: true
     }
   ],

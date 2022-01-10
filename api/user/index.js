@@ -7,7 +7,8 @@ const {
   getUserByIdHandler,
   updateUserHandler,
   updateUserCartHandler,
-  getUserCartHandler
+  getUserCartHandler,
+  deleteItemCartHandler
 } = require('./user.controller');
 
 const { UserSchema } = require('./user.schema')
@@ -23,6 +24,7 @@ router.post('/',
   createUserHandler
 );
 router.get('/cart/', isAuthenticated(), getUserCartHandler);
+router.patch('/removeCartItem/', isAuthenticated(), deleteItemCartHandler);
 router.get('/:id', isAuthenticated(), getUserByIdHandler);
 router.delete('/:id', hasRole(['admin']), deleteUserHandler);
 router.patch('/:id', isAuthenticated(), updateUserHandler);

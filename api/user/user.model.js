@@ -20,10 +20,11 @@ const UserSchema = new mongoose.Schema(
     },
     firstName: {
       type: String,
+      default: 'firstName'
     },
     lastName: {
       type: String,
-
+      default: 'lastName'
     },
     phone: {
       type: String,
@@ -36,8 +37,19 @@ const UserSchema = new mongoose.Schema(
     },
     cart: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Room',
+        room: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Room',
+          required: true
+        },
+        checkIn: {
+          type: Date,
+
+        },
+        checkOut: {
+          type: Date,
+
+        }
       }
     ],
     role: {
