@@ -23,7 +23,10 @@ async function loginUserHandler(req, res) {
 
     res.status(200).json({ token });
   } catch (err) {
+    console.log('error en la consola')
     res.status(400).json(err);
+    console.log('email', email)
+    console.log('password', password)
   }
 }
 
