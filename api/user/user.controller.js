@@ -105,7 +105,7 @@ async function updateUserCartHandler(req, res) {
   const { checkIn, checkOut } = req.body;
   try {
     const user = await getUserById(userId);
-    console.log(user)
+
     if (user.cart.find(c => c.room.toString() === id)) {
       return res.status(202).json({ message: 'The room is already added' })
     }
@@ -126,6 +126,7 @@ async function updateUserCartHandler(req, res) {
     });
   }
 }
+
 
 async function deleteItemCartHandler(req, res) {
   const userId = req.user;
