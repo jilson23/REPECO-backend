@@ -48,6 +48,10 @@ async function createUser(user) {
  * @returns user updated
  */
 async function updateUser(id, user) {
+  // const updatedUser = await User.findByIdAndUpdate(id, user, { new: true }, function(err, doc) {
+  //   if (err) throw err;
+  //   doc.save();
+  // });
   const updatedUser = await User.findByIdAndUpdate(id, user, { new: true });
   return updatedUser;
 }
