@@ -13,6 +13,7 @@ async function loginUserHandler(req, res) {
     }
 
     const isMatch = await user.comparePassword(password);
+
     if (!isMatch) {
       return res.status(400).json({
         message: 'Email or password is incorrect',
