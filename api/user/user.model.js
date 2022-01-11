@@ -81,23 +81,6 @@ UserSchema.pre('save', async function (next) {
   }
 })
 
-// UserSchema.pre('updateOne', async function (next) {
-//   const user = this;
-
-//   try {
-//     if (!user.isModified('password')) {
-//       return next();
-//     }
-
-//     const salt = await bcrypt.genSalt(10);
-//     const hash = await bcrypt.hash(user.password, salt);
-
-//     user.password = hash;
-//   } catch (error) {
-//     next(error);
-//   }
-// })
-
 UserSchema.pre('findOneAndUpdate', async function() {
   const passUpdate = await this.model.findOne(this.getQuery())
   try {
