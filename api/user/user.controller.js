@@ -39,7 +39,7 @@ async function getUserCartHandler(req, res) {
     if (!user) {
       return res.status(404).json({ message: 'User not found ' });
     }
-
+    console.log(user.cart)
     return res.status(200).json(user.cart);
   } catch (error) {
     return res.status(500).json({ error: error.message });
@@ -78,18 +78,41 @@ async function updateUserHandler(req, res) {
 async function updateUserCartHandler(req, res) {
   const { id } = req.params; // RoomId
   const userId = req.user;
-
+  const { checkIn, checkOut } = req.body;
   try {
     const user = await getUserById(userId);
-    if (user.cart.includes(id)) {
+    console.log(user)
+    if (user.cart.find(c => c.room.toString() === id)) {
       return res.status(202).json({ message: 'The room is already added' })
     }
-    user.cart.push(id)
+    user.cart.push({ room: id, checkIn, checkOut })
 
     const updatedUser = await updateUser(userId, user);
 
     if (!updatedUser) {
       return res.status(404).json({ message: `User not found with id: ${id}` });
+    }
+
+    return res.status(200).json(updatedUser);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
+
+async function deleteItemCartHandler(req, res) {
+  const userId = req.user;
+  const { room } = req.body;
+  try {
+    const user = await getUserById(userId);
+
+    const newUserCart = user.cart.filter(c => c.room.toString() !== room)
+
+    user.cart = newUserCart
+
+    const updatedUser = await updateUser(userId, user);
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found ' });
     }
 
     return res.status(200).json(updatedUser);
@@ -120,5 +143,6 @@ module.exports = {
   getUserByIdHandler,
   updateUserHandler,
   updateUserCartHandler,
-  getUserCartHandler
+  getUserCartHandler,
+  deleteItemCartHandler
 };
