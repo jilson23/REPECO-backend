@@ -34,10 +34,21 @@ const UserSchema = new mongoose.Schema({
     maxlength: 8,
 
   },
-  cart: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Room',
-  }],
+  cart: [
+    {
+      room: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Room',
+      },
+      checkIn: {
+        type: Date,
+        required: true,
+      },
+      checkOut: {
+        type: Date,
+        required: true,
+      }
+    }],
   role: {
     type: String,
     enum: config.userRoles,
@@ -70,22 +81,22 @@ UserSchema.pre('save', async function (next) {
   }
 })
 
-UserSchema.pre('updateOne', async function (next) {
-  const user = this;
-  console.log(user)
-  try {
-    if (!user.isModified('password')) {
-      return next();
-    }
+// UserSchema.pre('updateOne', async function (next) {
+//   const user = this;
 
-    const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(user.password, salt);
+//   try {
+//     if (!user.isModified('password')) {
+//       return next();
+//     }
 
-    user.password = hash;
-  } catch (error) {
-    next(error);
-  }
-})
+//     const salt = await bcrypt.genSalt(10);
+//     const hash = await bcrypt.hash(user.password, salt);
+
+//     user.password = hash;
+//   } catch (error) {
+//     next(error);
+//   }
+// })
 
 UserSchema.pre('findOneAndUpdate', async function() {
   const passUpdate = await this.model.findOne(this.getQuery())

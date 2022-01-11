@@ -51,7 +51,7 @@ async function getUserCartHandler(req, res) {
         message: 'User not found '
       });
     }
-
+    console.log(user.cart)
     return res.status(200).json(user.cart);
   } catch (error) {
     return res.status(500).json({
@@ -81,7 +81,6 @@ async function createUserHandler(req, res) {
 
 async function updateUserHandler(req, res) {
   const id = req.user._id;
-  console.log(req.body);
   try {
     const user = await updateUser(id, req.body);
     if (!user) {
@@ -103,15 +102,14 @@ async function updateUserCartHandler(req, res) {
     id
   } = req.params; // RoomId
   const userId = req.user;
-
+  const { checkIn, checkOut } = req.body;
   try {
     const user = await getUserById(userId);
-    if (user.cart.includes(id)) {
-      return res.status(202).json({
-        message: 'The room is already added'
-      })
+    console.log(user)
+    if (user.cart.find(c => c.room.toString() === id)) {
+      return res.status(202).json({ message: 'The room is already added' })
     }
-    user.cart.push(id)
+    user.cart.push({ room: id, checkIn, checkOut })
 
     const updatedUser = await updateUser(userId, user);
 
@@ -126,6 +124,28 @@ async function updateUserCartHandler(req, res) {
     return res.status(500).json({
       error: error.message
     });
+  }
+}
+
+async function deleteItemCartHandler(req, res) {
+  const userId = req.user;
+  const { room } = req.body;
+  try {
+    const user = await getUserById(userId);
+
+    const newUserCart = user.cart.filter(c => c.room.toString() !== room)
+
+    user.cart = newUserCart
+
+    const updatedUser = await updateUser(userId, user);
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found ' });
+    }
+
+    return res.status(200).json(updatedUser);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
   }
 }
 
@@ -157,5 +177,6 @@ module.exports = {
   getUserByIdHandler,
   updateUserHandler,
   updateUserCartHandler,
-  getUserCartHandler
+  getUserCartHandler,
+  deleteItemCartHandler
 };

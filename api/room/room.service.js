@@ -16,7 +16,7 @@ async function getAllRooms() {
  * @returns room
 */
 async function getRoomById(id) {
-  const room = await Room.findById(id);
+  const room = await Room.findById(id).populate('hotel');
   return room;
 }
 
