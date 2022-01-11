@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 const User = require('./user.model');
 
 /**
@@ -26,7 +27,7 @@ async function getUserById(id) {
  * @returns user
 */
 async function findOneUser(query) {
-  const user = await User.findOne(query).populate({ path: 'cart', populate: { path: 'hotel' } });
+  const user = await User.findOne(query).populate({ path: 'cart.room', populate: { path: 'hotel' } });
   return user;
 }
 
@@ -47,6 +48,10 @@ async function createUser(user) {
  * @returns user updated
  */
 async function updateUser(id, user) {
+  // const updatedUser = await User.findByIdAndUpdate(id, user, { new: true }, function(err, doc) {
+  //   if (err) throw err;
+  //   doc.save();
+  // });
   const updatedUser = await User.findByIdAndUpdate(id, user, { new: true });
   return updatedUser;
 }
