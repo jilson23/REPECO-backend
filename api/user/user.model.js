@@ -34,10 +34,22 @@ const UserSchema = new mongoose.Schema({
     maxlength: 8,
 
   },
-  cart: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Room',
-  }],
+  cart: [
+    {
+      room: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Room',
+      },
+      checkIn: {
+        type: Date,
+        required: true,
+      },
+      checkOut: {
+        type: Date,
+        required: true,
+      }
+    }
+  ],
   role: {
     type: String,
     enum: config.userRoles,
