@@ -89,11 +89,14 @@ UserSchema.pre('updateOne', async function (next) {
 
 UserSchema.pre('findOneAndUpdate', async function() {
   const passUpdate = await this.model.findOne(this.getQuery())
-
-  if (passUpdate.password !== this._update.password) {
-    const salt = await bcrypt.genSalt(10);
-    const newPassword = await bcrypt.hash(this._update.password, salt)
-    this._update.password = newPassword
+  try {
+    if (passUpdate.password !== this._update.password) {
+      const salt = await bcrypt.genSalt(10);
+      const newPassword = await bcrypt.hash(this._update.password, salt)
+      this._update.password = newPassword
+    }
+  } catch (error) {
+    console.log(error);
   }
 })
 
