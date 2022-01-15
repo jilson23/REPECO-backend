@@ -127,6 +127,35 @@ async function updateUserCartHandler(req, res) {
   }
 }
 
+async function deleteCartHandler(req, res) {
+  const userId = req.user;
+
+  try {
+    const user = await getUserById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        message: `User not found with id: ${userId}`
+      });
+    }
+    user.cart = []
+
+    const updatedUser = await updateUser(userId, user);
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        message: `User not found with id: ${userId}`
+      });
+    }
+
+    return res.status(200).json(updatedUser);
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message
+    });
+  }
+}
+
 async function deleteItemCartHandler(req, res) {
   const userId = req.user;
   const { room } = req.body;
@@ -178,5 +207,6 @@ module.exports = {
   updateUserHandler,
   updateUserCartHandler,
   getUserCartHandler,
-  deleteItemCartHandler
+  deleteItemCartHandler,
+  deleteCartHandler
 };
