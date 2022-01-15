@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const { isAuthenticated } = require('../../auth/auth.service');
 
 const {
   createInvoiceHandler,
@@ -11,7 +12,7 @@ const {
 const router = Router();
 
 router.get('/', getAllInvoicesHandler);
-router.post('/', createInvoiceHandler);
+router.post('/', isAuthenticated(), createInvoiceHandler);
 router.get('/:id', getInvoiceByIdHandler);
 router.delete('/:id', updateInvoiceHandler);
 router.patch('/:id', deleteInvoiceHandler);
