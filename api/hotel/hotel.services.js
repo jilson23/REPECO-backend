@@ -6,7 +6,7 @@ const Hotel = require('./hotel.model');
  */
 
 async function getAllHotels() {
-  const hotels = await Hotel.find();
+  const hotels = await Hotel.find().populate({ path: 'user' });
   return hotels;
 }
 

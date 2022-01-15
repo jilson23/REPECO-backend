@@ -9,6 +9,7 @@ const {
 async function getAllRoomsHandler(req, res) {
   try {
     const rooms = await getAllRooms();
+    console.log('rooms', rooms)
     return res.status(200).json(rooms)
   } catch (error) {
     return res.status(500).json({ error: error.message })
