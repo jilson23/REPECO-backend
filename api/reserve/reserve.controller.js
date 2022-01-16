@@ -32,13 +32,13 @@ async function getReserveByIdHandler(req, res) {
 
 async function createReserveHandler(req, res) {
   const userId = req.user._id;
-  const reserve = req.body
+  const reserve = req.body;
 
-  reserve.user = userId
-  console.log('reserve', reserve)
+  reserve.user = userId;
+
   try {
-    const Reserve = await createReserve(reserve);
-    return res.status(201).json(Reserve);
+    const newReserve = await createReserve(reserve);
+    return res.status(201).json(newReserve);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
