@@ -9,6 +9,7 @@ const {
   updateUserCartHandler,
   getUserCartHandler,
   deleteItemCartHandler,
+  deleteCartHandler,
 } = require('./user.controller');
 
 const { UserSchema } = require('./user.schema')
@@ -26,6 +27,7 @@ router.post('/',
   createUserHandler
 );
 router.get('/cart/', isAuthenticated(), getUserCartHandler);
+router.delete('/cart', isAuthenticated(), deleteCartHandler);
 router.patch('/profile', isAuthenticated(), updateUserHandler);
 router.patch('/cartitem', isAuthenticated(), deleteItemCartHandler);
 router.get('/profile', isAuthenticated(), getUserByIdHandler);

@@ -31,9 +31,18 @@ async function getInvoiceByIdHandler(req, res) {
 }
 
 async function createInvoiceHandler(req, res) {
+  const userId = req.user._id;
+  const invoice = req.body
+
+  invoice.user = userId;
   try {
-    const Invoice = await createInvoice(req.body);
-    return res.status(201).json(Invoice);
+    const invoices = await getAllInvoices();
+
+    const maxInvoiceId = Math.max.apply(Math, invoices.map(function(i) { return i.invoiceNumber; }))
+    invoice.invoiceNumber = maxInvoiceId + 1;
+
+    const newInvoice = await createInvoice(req.body);
+    return res.status(201).json(newInvoice);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }

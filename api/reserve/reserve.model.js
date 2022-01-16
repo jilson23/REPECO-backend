@@ -12,7 +12,6 @@ const ReserveSchema = new mongoose.Schema({
   isProcesing: {
     type: Boolean,
     default: false,
-    required: true
   },
   room: {
     type: mongoose.Schema.Types.ObjectId,
