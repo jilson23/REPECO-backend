@@ -8,7 +8,8 @@ const {
   updateUserHandler,
   updateUserCartHandler,
   getUserCartHandler,
-  deleteItemCartHandler
+  deleteItemCartHandler,
+  getUserHotelRoomsHandler
 } = require('./user.controller');
 
 const { UserSchema } = require('./user.schema')
@@ -29,6 +30,7 @@ router.get('/cart/', isAuthenticated(), getUserCartHandler);
 router.patch('/profile', isAuthenticated(), updateUserHandler);
 router.patch('/cartitem', isAuthenticated(), deleteItemCartHandler);
 router.get('/profile', isAuthenticated(), getUserByIdHandler);
+router.get('/rooms/', hasRole(['hotel']), getUserHotelRoomsHandler);
 router.delete('/:id', hasRole(['admin']), deleteUserHandler);
 router.patch('/cart/:id', isAuthenticated(), updateUserCartHandler);
 

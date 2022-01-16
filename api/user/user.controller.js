@@ -7,6 +7,10 @@ const {
   findOneUser
 } = require('./user.service')
 
+const { findOneHotel } = require('../hotel/hotel.services')
+
+const { getRoomsByHotelId } = require('../room/room.service')
+
 async function getAllUsersHandler(req, res) {
   try {
     const users = await getAllUsers();
@@ -15,6 +19,26 @@ async function getAllUsersHandler(req, res) {
     return res.status(500).json({
       error: error.message
     })
+  }
+}
+
+async function getUserHotelRoomsHandler(req, res) {
+  const id = req.user._id;
+  try {
+    const hotel = await findOneHotel(id);
+    const rooms = await getRoomsByHotelId(hotel._id)
+
+    if (!rooms) {
+      return res.status(404).json({
+        message: `Rooms not found with id: ${id}`
+      });
+    }
+
+    return res.status(200).json(rooms);
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message
+    });
   }
 }
 
@@ -127,7 +151,6 @@ async function updateUserCartHandler(req, res) {
   }
 }
 
-
 async function deleteItemCartHandler(req, res) {
   const userId = req.user;
   const { room } = req.body;
@@ -179,5 +202,6 @@ module.exports = {
   updateUserHandler,
   updateUserCartHandler,
   getUserCartHandler,
-  deleteItemCartHandler
+  deleteItemCartHandler,
+  getUserHotelRoomsHandler
 };
