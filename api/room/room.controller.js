@@ -3,8 +3,11 @@ const {
   deleteRoom,
   getAllRooms,
   getRoomById,
-  updateRoom
+  updateRoom,
+  getRoomsByHotelId,
 } = require('./room.service')
+
+const { findOneHotel } = require('../hotel/hotel.services')
 
 async function getAllRoomsHandler(req, res) {
   try {
@@ -28,6 +31,31 @@ async function getRoomByIdHandler(req, res) {
     return res.status(200).json(Room);
   } catch (error) {
     return res.status(500).json({ error: error.message });
+  }
+}
+
+async function getRoomsbyHotelHandler(req, res) {
+  const id = req.user._id;
+  try {
+    const hotel = await findOneHotel(id);
+    if (!hotel) {
+      return res.status(404).json({
+        message: 'Hotel not found'
+      });
+    }
+    const rooms = await getRoomsByHotelId(hotel._id)
+
+    if (!rooms) {
+      return res.status(404).json({
+        message: 'Rooms not found'
+      });
+    }
+
+    return res.status(200).json(rooms);
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message
+    });
   }
 }
 
@@ -76,4 +104,5 @@ module.exports = {
   getAllRoomsHandler,
   getRoomByIdHandler,
   updateRoomHandler,
+  getRoomsbyHotelHandler,
 };

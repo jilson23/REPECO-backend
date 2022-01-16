@@ -21,6 +21,17 @@ async function getHotelById(id) {
 }
 
 /**
+ * Get hotel by parameter
+ * @param {objectId} id Indentifier of the hotel to be filtered
+ * @returns hotel
+*/
+
+async function findOneHotel(query) {
+  const hotel = await Hotel.findOne({ user: query });
+  return hotel;
+}
+
+/**
  * Create a new hotel
  * @param {Object} hotel Hotel to create
  * @returns Hotel created
@@ -58,4 +69,5 @@ module.exports = {
   getAllHotels,
   getHotelById,
   updateHotel,
+  findOneHotel,
 };

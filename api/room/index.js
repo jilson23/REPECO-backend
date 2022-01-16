@@ -6,13 +6,15 @@ const {
   getAllRoomsHandler,
   getRoomByIdHandler,
   updateRoomHandler,
+  getRoomsbyHotelHandler,
 } = require('./room.controller');
-
+const { hasRole } = require('../../auth/auth.service')
 // const { hasRole } = require('../../auth/auth.service');
 
 const router = Router();
 
 router.get('/', getAllRoomsHandler);
+router.get('/hotel', hasRole(['hotel']), getRoomsbyHotelHandler);
 router.get('/:id', getRoomByIdHandler);
 router.post('/', createRoomHandler);
 router.patch('/:id', deleteRoomHandler);

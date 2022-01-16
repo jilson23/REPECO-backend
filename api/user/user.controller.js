@@ -156,7 +156,6 @@ async function deleteCartHandler(req, res) {
   }
 }
 
-
 async function deleteItemCartHandler(req, res) {
   const userId = req.user;
   const { room } = req.body;
@@ -209,5 +208,5 @@ module.exports = {
   updateUserCartHandler,
   getUserCartHandler,
   deleteItemCartHandler,
-  deleteCartHandler
+  deleteCartHandler,
 };
