@@ -3,7 +3,9 @@ const user = require('./api/user');
 const hotel = require('./api/hotel')
 const reserve = require('./api/reserve')
 const authLocal = require('./auth/local');
+
 const invoices = require('./api/invoice');
+const epayco = require('./epayco');
 
 // defining routes
 function routes(app) {
@@ -12,6 +14,7 @@ function routes(app) {
   app.use('/api/hotels', hotel);
   app.use('/api/reserves', reserve);
   app.use('/api/invoices', invoices);
+  app.use('/epayco', epayco);
   // auth routes
   app.use('/auth/local', authLocal);
 }
