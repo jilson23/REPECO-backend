@@ -15,8 +15,6 @@ function routes(app) {
   app.use('/api/reserves', reserve);
   app.use('/api/invoices', invoices);
   app.use('/epayco', epayco);
-  // file route
-
   // auth routes
   app.use('/auth/local', authLocal);
 }

@@ -9,7 +9,7 @@ const {
   updateUserCartHandler,
   getUserCartHandler,
   deleteItemCartHandler,
-  deleteCartHandler
+  deleteCartHandler,
 } = require('./user.controller');
 
 const { UserSchema } = require('./user.schema')
