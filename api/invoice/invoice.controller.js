@@ -1,9 +1,19 @@
+const Invoice = require('./invoice.model');
+
+const {
+  addBillingCards,
+  addBillingCustomerId
+} = require('../user/user.service');
+
 const {
   createInvoice,
   deleteInvoice,
   getAllInvoices,
   getInvoiceById,
-  updateInvoice
+  updateInvoice,
+  createCardToken,
+  createCustomer,
+  makePayment
 } = require('./invoice.service')
 
 async function getAllInvoicesHandler(req, res) {
@@ -78,10 +88,105 @@ async function deleteInvoiceHandler(req, res) {
   }
 }
 
+async function createCardTokenHandlers(req, res) {
+  const { cardNumber, cardExpYear, cardExpMonth, cardCVC } = req.body;
+
+  const creditInfo = {
+    'card[number]': cardNumber,
+    'card[exp_year]': cardExpYear,
+    'card[exp_month]': cardExpMonth,
+    'card[cvc]': cardCVC,
+  };
+
+  try {
+    const { card, id, status } = await createCardToken(creditInfo);
+
+    const user = req.user;
+
+    const creditCard = {
+      expMonth: card.exp_month,
+      expYear: card.exp_year,
+      name: card.name,
+      mask: card.mask,
+      tokenId: id,
+    };
+
+    await addBillingCards(user, creditCard);
+
+    res.status(200).json({ card, id, status });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({
+      message: 'Error al crear el token',
+      error,
+    });
+  }
+}
+
+async function createCustomerHandlers(req, res) {
+  const user = req.user;
+
+  try {
+    const { data } = await createCustomer(user);
+
+    await addBillingCustomerId(user, data.customerId);
+
+    res.status(200).json(data)
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({
+      message: 'Error al crear el token',
+      error,
+    });
+  }
+}
+
+async function makePaymentHandlers(req, res) {
+  try {
+    const { user, body: invoice } = req;
+
+    const invoices = await getAllInvoices();
+
+    const maxInvoiceId = Math.max.apply(Math, invoices.map(function(i) { return i.invoiceNumber; }))
+    const newInvoiceId = maxInvoiceId + 1;
+
+    invoice.bill = newInvoiceId;
+
+    const { data, success } = await makePayment(user, invoice);
+
+    if (!success) {
+      return res.status(400).json(data);
+    }
+
+    await Invoice.create({
+      user: user._id,
+      rooms: invoice.rooms,
+      refId: data.recibo,
+      bill: invoice.bill,
+      description: invoice.description,
+      value: invoice.value,
+      tax: invoice?.tax,
+      taxBase: invoice?.taxBase,
+      invoiceNumber: Number(invoice.bill),
+    });
+
+    return res.status(200).json({ success, data });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({
+      message: 'Error realizando el pago',
+      error,
+    });
+  }
+}
+
 module.exports = {
   createInvoiceHandler,
   deleteInvoiceHandler,
   getAllInvoicesHandler,
   getInvoiceByIdHandler,
   updateInvoiceHandler,
+  createCardTokenHandlers,
+  createCustomerHandlers,
+  makePaymentHandlers
 };

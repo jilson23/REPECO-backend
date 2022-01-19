@@ -1,3 +1,12 @@
+const epayco = require('epayco-sdk-node')({
+  apiKey: process.env.EPAYCO_PUBLIC_KEY,
+  privateKey: process.env.EPAYCO_PRIVATE_KEY,
+  lang: 'ES',
+  test: true,
+});
+
+const get = require('lodash/get');
+
 const Invoice = require('./invoice.model');
 
 /**
@@ -52,10 +61,59 @@ async function deleteInvoice(id) {
   return deletedInvoice;
 }
 
+async function createCardToken(creditCardInfo) {
+  return await epayco.token.create(creditCardInfo);
+}
+
+async function createCustomer(user) {
+  const customerInfo = {
+    token_card: user?.billing?.creditCards?.[0]?.tokenId,
+    name: user.firstName,
+    last_name: user.lastName,
+    email: user.email,
+    default: true
+  }
+
+  return epayco.customers.create(customerInfo);
+}
+
+async function makePayment(user, invoice) {
+  const defaultTokenId = get(user, 'billing.creditCards[0].tokenId');
+  const customerId = get(user, 'billing.customerId');
+
+  const paymentInfo = {
+    token_card: get(invoice, 'tokenId', defaultTokenId),
+    customer_id: get(invoice, 'customerId', customerId),
+    doc_type: get(invoice, 'docType'),
+    doc_number: get(invoice, 'docNumber'),
+    name: get(invoice, 'firstName', user.firstName),
+    last_name: get(invoice, 'lastName', user.lastName),
+    email: get(invoice, 'email', user.email),
+    city: get(invoice, 'city'),
+    address: get(invoice, 'address'),
+    phone: get(invoice, 'phone'),
+    cell_phone: get(invoice, 'cellPhone'),
+    bill: get(invoice, 'bill'),
+    description: get(invoice, 'description'),
+    value: get(invoice, 'value'),
+    tax: get(invoice, 'tax'),
+    tax_base: get(invoice, 'taxBase'),
+    currency: get(invoice, 'currency'),
+    dues: get(invoice, 'dues'),
+    ip: get(invoice, 'ip'),
+    use_default_card_customer: true,
+  };
+
+  return await epayco.charge.create(paymentInfo);
+}
+
 module.exports = {
   createInvoice,
   deleteInvoice,
   getAllInvoices,
   getInvoiceById,
   updateInvoice,
+  createCardToken,
+  createCustomer,
+  makePayment,
 };
