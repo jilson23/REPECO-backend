@@ -1,17 +1,37 @@
 const mongoose = require('mongoose')
 
 const InvoiceSchema = new mongoose.Schema({
-  subtotal: {
-    type: Number,
-    required: true
+  refId: {
+    type: String,
+    required: true,
+    trim: true,
   },
-  igv: {
-    type: Number,
-    required: true
+  bill: {
+    type: String,
+    required: true,
+    trim: true,
   },
-  totalPrice: {
+  description: {
+    type: String,
+    uppercase: true,
+    required: true,
+  },
+  value: {
     type: Number,
-    required: true
+    required: true,
+  },
+  tax: {
+    type: Number,
+    default: 0,
+  },
+  taxBase: {
+    type: Number,
+    default: 0,
+  },
+  currency: {
+    type: String,
+    trim: true,
+    uppercase: true,
   },
   invoiceNumber: {
     type: Number,

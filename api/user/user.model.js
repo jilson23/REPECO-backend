@@ -3,6 +3,45 @@ const bcrypt = require('bcrypt');
 
 const config = require('../../config')
 
+const CreditCardSchema = new mongoose.Schema(
+  {
+    expMonth: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    expYear: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    mask: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    tokenId: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+  },
+  { _id: false },
+);
+
+const BillingSchema = new mongoose.Schema(
+  {
+    creditCards: [CreditCardSchema],
+    customerId: String,
+  },
+  { _id: false },
+);
+
 const UserSchema = new mongoose.Schema({
   email: {
     type: String,
@@ -60,6 +99,7 @@ const UserSchema = new mongoose.Schema({
   },
   passwordResetToken: String,
   passwordResetExpires: Date,
+  billing: BillingSchema,
 }, {
   timestamps: true,
 },)
@@ -90,7 +130,7 @@ UserSchema.pre('findOneAndUpdate', async function() {
       this._update.password = newPassword
     }
   } catch (error) {
-    console.log(error);
+    console.log('errorSalt', error);
   }
 })
 

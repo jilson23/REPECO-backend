@@ -1,5 +1,6 @@
 /* eslint-disable no-useless-catch */
 const User = require('./user.model');
+const get = require('lodash/get');
 
 /**
  * Get all users
@@ -66,6 +67,35 @@ async function deleteUser(id) {
   return deletedUser;
 }
 
+async function addBillingCards(user, card) {
+  const creditCards = get(user, 'billing.creditCards', []);
+  const customer = {
+    billing: {
+      creditCards: creditCards.concat(card),
+    },
+  };
+
+  const updatedUser = await User.findByIdAndUpdate(user._id, customer, {
+    new: true,
+  });
+  return updatedUser;
+}
+
+async function addBillingCustomerId(user, customerId) {
+  const creditCards = get(user, 'billing.creditCards', []);
+  const customer = {
+    billing: {
+      creditCards,
+      customerId
+    },
+  };
+
+  const updatedUser = await User.findByIdAndUpdate(user._id, customer, {
+    new: true,
+  });
+  return updatedUser;
+}
+
 module.exports = {
   createUser,
   deleteUser,
@@ -73,4 +103,6 @@ module.exports = {
   getUserById,
   findOneUser,
   updateUser,
+  addBillingCards,
+  addBillingCustomerId
 };
