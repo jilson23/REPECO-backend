@@ -6,7 +6,7 @@ const Hotel = require('./hotel.model');
  */
 
 async function getAllHotels() {
-  const hotels = await Hotel.find();
+  const hotels = await Hotel.find().populate({ path: 'user' });
   return hotels;
 }
 
@@ -17,6 +17,17 @@ async function getAllHotels() {
 */
 async function getHotelById(id) {
   const hotel = await Hotel.findById(id);
+  return hotel;
+}
+
+/**
+ * Get hotel by parameter
+ * @param {objectId} id Indentifier of the hotel to be filtered
+ * @returns hotel
+*/
+
+async function findOneHotel(query) {
+  const hotel = await Hotel.findOne({ user: query });
   return hotel;
 }
 
@@ -58,4 +69,5 @@ module.exports = {
   getAllHotels,
   getHotelById,
   updateHotel,
+  findOneHotel,
 };

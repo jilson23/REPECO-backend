@@ -21,6 +21,16 @@ async function getRoomById(id) {
 }
 
 /**
+ * Get room by hotel id
+ * @param {string} id Indentifier of the note to be filtered
+ * @returns room
+*/
+async function getRoomsByHotelId(ids) {
+  const room = await Room.find({ hotel: ids });
+  return room;
+}
+
+/**
  * Create a new room
  * @param {Object} room Room to create
  * @returns Room created
@@ -58,4 +68,5 @@ module.exports = {
   getAllRooms,
   getRoomById,
   updateRoom,
+  getRoomsByHotelId,
 };

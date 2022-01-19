@@ -13,10 +13,6 @@ function routes(app) {
   app.use('/api/hotels', hotel);
   app.use('/api/reserves', reserve);
   app.use('/api/invoices', invoices);
-
-  // file route
-
-  // auth routes
   app.use('/auth/local', authLocal);
 }
 
