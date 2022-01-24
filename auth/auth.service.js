@@ -86,7 +86,7 @@ function signToken(payload) {
   });
 
   return token;
-}
+};
 
 module.exports = {
   signToken,

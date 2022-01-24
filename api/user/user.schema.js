@@ -9,7 +9,7 @@ const ParamsSchema = Joi.object({
 
 const PayloadSchema = Joi.object().keys({
   email: Joi.string().required(),
-  password: Joi.string().min(8).max(30).required(),
+  password: Joi.string().min(8).max(100).required(),
   firstName: Joi.string(),
   lastName: Joi.string(),
   phone: Joi.string(),

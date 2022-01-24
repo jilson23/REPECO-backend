@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+
 const {
   createUser,
   deleteUser,
@@ -6,6 +8,7 @@ const {
   updateUser,
   findOneUser
 } = require('./user.service')
+const { sendEmail } = require('../../utils/email');
 
 async function getAllUsersHandler(req, res) {
   try {
@@ -60,16 +63,35 @@ async function getUserCartHandler(req, res) {
 }
 
 async function createUserHandler(req, res) {
+  const newUser = req.body;
   try {
-    const userExists = await findOneUser({
-      email: req.body.email
-    })
-    if (userExists) {
-      return res.status(409).json({
-        error: 'user already exists'
-      })
+    // const userExists = await findOneUser({
+    //   email: req.body.email
+    // })
+    // if (userExists) {
+    //   return res.status(409).json({
+    //     error: 'user already exists'
+    //   })
+    // }
+
+    const hash = crypto.createHash('sha256').update(newUser.email).digest('hex');
+    newUser.passwordResetToken = hash;
+    newUser.passwordResetExpires = Date.now() + 3600000 * 24;// 24 hour
+
+    const user = await createUser(newUser);
+
+    const email = {
+      to: user.email,
+      subject: 'Confirm account',
+      template_id: 'd-97aa84e5f39e4a908f90bfedee154960',
+      dynamic_template_data: {
+        url: 'http://localhost:3000/user/activate/' + hash,
+        email: user.email
+      }
     }
-    const user = await createUser(req.body);
+
+    sendEmail(email)
+
     res.status(201).json(user);
   } catch (error) {
     res.status(500).json({
