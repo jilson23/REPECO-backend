@@ -2,7 +2,8 @@ const Invoice = require('./invoice.model');
 
 const {
   addBillingCards,
-  addBillingCustomerId
+  addBillingCustomerId,
+  getUserById
 } = require('../user/user.service');
 
 const {
@@ -14,7 +15,8 @@ const {
   createCardToken,
   createCustomer,
   makePayment
-} = require('./invoice.service')
+} = require('./invoice.service');
+const { get } = require('lodash');
 
 async function getAllInvoicesHandler(req, res) {
   try {
@@ -144,6 +146,37 @@ async function createCustomerHandlers(req, res) {
 async function makePaymentHandlers(req, res) {
   try {
     const { user, body: invoice } = req;
+    const defaultTokenId = get(user, 'billing.creditCards[0].tokenId', false);
+    const customerId = get(user, 'billing.customerId', false);
+
+    if (!defaultTokenId) {
+      const { cardNumber, cardExpYear, cardExpMonth, cardCVC } = invoice;
+      const creditInfo = {
+        'card[number]': cardNumber,
+        'card[exp_year]': cardExpYear,
+        'card[exp_month]': cardExpMonth,
+        'card[cvc]': cardCVC,
+      };
+
+      const { card, id } = await createCardToken(creditInfo);
+
+      const creditCard = {
+        expMonth: card.exp_month,
+        expYear: card.exp_year,
+        name: card.name,
+        mask: card.mask,
+        tokenId: id,
+      };
+
+      const updatedUser = await addBillingCards(user, creditCard);
+
+      if (!customerId) {
+        const { data } = await createCustomer(updatedUser);
+        await addBillingCustomerId(updatedUser, data.customerId);
+      }
+    }
+
+    const userPayment = await getUserById(user._id)
 
     const invoices = await getAllInvoices();
 
@@ -152,7 +185,7 @@ async function makePaymentHandlers(req, res) {
 
     invoice.bill = newInvoiceId;
 
-    const { data, success } = await makePayment(user, invoice);
+    const { data, success } = await makePayment(userPayment, invoice);
 
     if (!success) {
       return res.status(400).json(data);

@@ -68,10 +68,11 @@ const UserSchema = new mongoose.Schema({
     type: String,
     // validate: isMobilePhone('esPE')
   },
-  document: {
+  docType: {
     type: String,
-    maxlength: 8,
-
+  },
+  docNumber: {
+    type: String,
   },
   cart: [
     {
