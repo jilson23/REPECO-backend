@@ -13,6 +13,18 @@ async function getAllUsers() {
 }
 
 /**
+ *
+ * @param {string} email email of use to identify user
+ * @returns user
+ */
+
+async function getUserByEmail(email) {
+  const user = await User.findOne({ email });
+
+  return user;
+}
+
+/**
  * Get user by id
  * @param {string} id Indentifier of the note to be filtered
  * @returns user
@@ -101,6 +113,7 @@ module.exports = {
   deleteUser,
   getAllUsers,
   getUserById,
+  getUserByEmail,
   findOneUser,
   updateUser,
   addBillingCards,
