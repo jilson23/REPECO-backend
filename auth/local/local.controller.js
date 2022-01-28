@@ -12,6 +12,12 @@ async function loginUserHandler(req, res) {
       });
     }
 
+    // if (!user.active) {
+    //   return res.status(403).json({
+    //     message: 'Please confirm your email',
+    //   });
+    // }
+
     const isMatch = await user.comparePassword(password);
 
     if (!isMatch) {
