@@ -78,6 +78,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     // validate: isMobilePhone('esPE')
   },
+  avatar: {
+    type: String,
+    default: 'm2jxrpwok0hd4yqmpkc3'
+  },
   cart: [
     {
       room: {
@@ -153,12 +157,14 @@ UserSchema.virtual('profile').get(function () {
     firstName,
     lastName,
     email,
-    role
+    role,
+    avatar,
   } = this;
   return {
     fullName: `${firstName.toUpperCase()} ${lastName.toUpperCase()}`,
     email,
-    role
+    role,
+    avatar
   }
 })
 
