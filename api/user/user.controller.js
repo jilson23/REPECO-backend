@@ -54,7 +54,6 @@ async function getUserCartHandler(req, res) {
         message: 'User not found '
       });
     }
-    console.log(user.cart)
     return res.status(200).json(user.cart);
   } catch (error) {
     return res.status(500).json({

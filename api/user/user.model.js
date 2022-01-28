@@ -20,6 +20,16 @@ const CreditCardSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    docType: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    docNumber: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     mask: {
       type: String,
       required: true,
