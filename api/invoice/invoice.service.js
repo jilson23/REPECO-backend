@@ -65,28 +65,38 @@ async function createCardToken(creditCardInfo) {
   return await epayco.token.create(creditCardInfo);
 }
 
-async function createCustomer(user) {
+async function createCustomer(user, cardIndex) {
+  if (cardIndex === '10') {
+    cardIndex = '0'
+  }
+  console.log('cardIndex', cardIndex)
+
   const customerInfo = {
-    token_card: user?.billing?.creditCards?.[0]?.tokenId,
+    token_card: user?.billing?.creditCards?.[cardIndex]?.tokenId,
     name: user.firstName,
     last_name: user.lastName,
     email: user.email,
     default: true
   }
 
+  console.log('customer', customerInfo)
   return epayco.customers.create(customerInfo);
 }
 
 async function makePayment(user, invoice) {
-  const defaultTokenId = get(user, 'billing.creditCards[0].tokenId');
+  let newCardIndex = invoice.cardIndex
+  if (newCardIndex === '10') {
+    newCardIndex = '0'
+  }
+  const defaultTokenId = get(user, `billing.creditCards[${newCardIndex}].tokenId`);
   const customerId = get(user, 'billing.customerId');
 
   const paymentInfo = {
     token_card: get(invoice, 'tokenId', defaultTokenId),
     customer_id: get(invoice, 'customerId', customerId),
-    doc_type: get(user, 'docType', 'DNI'),
-    doc_number: get(user, 'docNumber', '12345678'),
-    name: get(invoice, 'firstName', user.firstName),
+    doc_type: get(invoice, 'docType', 'DNI'),
+    doc_number: get(invoice, 'docNumber', '12345678'),
+    name: get(invoice, 'name', user.firstName),
     last_name: get(invoice, 'lastName', user.lastName),
     email: get(invoice, 'email', user.email),
     city: get(invoice, 'city'),

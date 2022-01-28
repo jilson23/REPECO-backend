@@ -146,7 +146,7 @@ async function createCustomerHandlers(req, res) {
 async function makePaymentHandlers(req, res) {
   try {
     const { user, body: invoice } = req;
-    const defaultTokenId = get(user, 'billing.creditCards[0].tokenId', false);
+    const defaultTokenId = get(user, `billing.creditCards[${invoice.cardIndex}].tokenId`, false);
     const customerId = get(user, 'billing.customerId', false);
 
     if (!defaultTokenId) {
@@ -163,7 +163,9 @@ async function makePaymentHandlers(req, res) {
       const creditCard = {
         expMonth: card.exp_month,
         expYear: card.exp_year,
-        name: card.name,
+        name: invoice.name,
+        docType: invoice.docType,
+        docNumber: invoice.docNumber,
         mask: card.mask,
         tokenId: id,
       };
@@ -171,7 +173,7 @@ async function makePaymentHandlers(req, res) {
       const updatedUser = await addBillingCards(user, creditCard);
 
       if (!customerId) {
-        const { data } = await createCustomer(updatedUser);
+        const { data } = await createCustomer(updatedUser, invoice.cardIndex);
         await addBillingCustomerId(updatedUser, data.customerId);
       }
     }

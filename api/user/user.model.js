@@ -20,6 +20,16 @@ const CreditCardSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    docType: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    docNumber: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     mask: {
       type: String,
       required: true,
@@ -67,12 +77,6 @@ const UserSchema = new mongoose.Schema({
   phone: {
     type: String,
     // validate: isMobilePhone('esPE')
-  },
-  docType: {
-    type: String,
-  },
-  docNumber: {
-    type: String,
   },
   cart: [
     {
