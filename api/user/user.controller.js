@@ -9,6 +9,7 @@ const {
   findOneUser
 } = require('./user.service')
 const { sendEmail } = require('../../utils/email');
+const { signToken } = require('../../auth/auth.service');
 
 async function getAllUsersHandler(req, res) {
   try {
@@ -109,8 +110,20 @@ async function updateUserHandler(req, res) {
         message: `User not found with id: ${id}`
       });
     }
+    const token = signToken(user.profile);
+    const client = {
+      _id: user._id,
+      email: user.email,
+      password: user.password,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      avatar: user.avatar,
+      token: token
+    }
 
-    return res.status(200).json(user);
+    console.log(client)
+    console.log('userrr', user)
+    return res.status(200).json(client);
   } catch (error) {
     return res.status(500).json({
       error: error.message
@@ -199,6 +212,23 @@ async function deleteItemCartHandler(req, res) {
   }
 }
 
+async function deleteSelfUser(req, res) {
+  const id = req.user._id;
+  try {
+    const user = await deleteUser(id);
+    if (!user) {
+      return res.status(400).json({
+        message: `User ${id} not found`
+      });
+    }
+    return res.status(200).json(user);
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message
+    });
+  }
+}
+
 async function deleteUserHandler(req, res) {
   const {
     id
@@ -230,4 +260,5 @@ module.exports = {
   getUserCartHandler,
   deleteItemCartHandler,
   deleteCartHandler,
+  deleteSelfUser,
 };

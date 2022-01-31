@@ -10,6 +10,7 @@ const {
   getUserCartHandler,
   deleteItemCartHandler,
   deleteCartHandler,
+  deleteSelfUser
 } = require('./user.controller');
 
 const { UserSchema } = require('./user.schema')
@@ -31,6 +32,7 @@ router.delete('/cart', isAuthenticated(), deleteCartHandler);
 router.patch('/profile', isAuthenticated(), updateUserHandler);
 router.patch('/cartitem', isAuthenticated(), deleteItemCartHandler);
 router.get('/profile', isAuthenticated(), getUserByIdHandler);
+router.delete('/delete', isAuthenticated(), deleteSelfUser);
 router.delete('/:id', hasRole(['admin']), deleteUserHandler);
 router.patch('/cart/:id', isAuthenticated(), updateUserCartHandler);
 
