@@ -19,7 +19,7 @@ router.get('/', getAllRoomsHandler);
 router.get('/hotel', hasRole(['hotel']), getRoomsbyHotelHandler);
 router.get('/:id', getRoomByIdHandler);
 router.post('/', upload.any(), hasRole(['hotel']), createRoomHandler);
-router.patch('/:id', deleteRoomHandler);
-router.delete('/:id', updateRoomHandler);
+router.patch('/:id', hasRole(['hotel']), updateRoomHandler);
+router.delete('/', deleteRoomHandler);
 
 module.exports = router;
