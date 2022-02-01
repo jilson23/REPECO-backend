@@ -1,9 +1,10 @@
+const { findOneHotel } = require('../hotel/hotel.services');
 const {
   createReserve,
   deleteReserve,
   getAllReserves,
   getReserveById,
-  updateReserve
+  updateReserve,
 } = require('./reserve.service')
 
 async function getAllReservesHandler(req, res) {
@@ -27,6 +28,44 @@ async function getReserveByIdHandler(req, res) {
     return res.status(200).json(Reserve);
   } catch (error) {
     return res.status(500).json({ error: error.message });
+  }
+}
+
+async function getReservesCountByHotelHandler(req, res) {
+  const user = req.user;
+  try {
+    const hotel = await findOneHotel(user._id)
+    const reserves = await getAllReserves();
+    const reservesByHotel = reserves.filter(reserve => reserve.room.hotel.equals(hotel._id))
+
+    const newArray = reservesByHotel.filter((value, index, self) =>
+      index === self.findIndex((t) => (
+        t.room.hotel === value.room.hotel
+      ))
+    )
+
+    const counts = {};
+
+    reservesByHotel.forEach(function (x) { counts[x.room._id] = (counts[x.room._id] || 0) + 1; });
+
+    const helper = []
+
+    newArray.forEach(item => {
+      Object.keys(counts).forEach(r => {
+        if (JSON.stringify(item.room._id) === JSON.stringify(r)) {
+          const newItem = {
+            _id: item.room._id,
+            title: item.room.title,
+            count: counts[r]
+          }
+          helper.push(newItem)
+        }
+      })
+    })
+
+    return res.status(200).json(helper)
+  } catch (error) {
+    return res.status(500).json({ error: error.message })
   }
 }
 
@@ -78,6 +117,7 @@ module.exports = {
   createReserveHandler,
   deleteReserveHandler,
   getAllReservesHandler,
+  getReservesCountByHotelHandler,
   getReserveByIdHandler,
   updateReserveHandler,
 };
