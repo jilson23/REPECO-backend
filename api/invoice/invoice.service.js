@@ -30,6 +30,16 @@ async function getInvoiceById(id) {
 }
 
 /**
+ * Get invoice by id and user
+ * @param {string} id Indentifier of the note to be filtered
+ * @returns invoice
+*/
+async function getInvoiceByIdAndUser(id, userId) {
+  const invoice = await Invoice.findOne({ _id: id, user: userId }).populate('user').populate('rooms');
+  return invoice;
+}
+
+/**
  * Create a new invoice
  * @param {Object} invoice Invoice to create
  * @returns Invoice created
@@ -126,4 +136,5 @@ module.exports = {
   createCardToken,
   createCustomer,
   makePayment,
+  getInvoiceByIdAndUser
 };
