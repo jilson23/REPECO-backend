@@ -41,7 +41,7 @@ async function changePasswordHandler(req, res) {}
 
 async function verifyAccount(req, res) {
   const { hash } = req.params;
-  console.log('hast verify', hash);
+  // console.log('hast verify', hash);
   try {
     const user = await findOneUser({ passwordResetToken: hash });
     if (!user) {
