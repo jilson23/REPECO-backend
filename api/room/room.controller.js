@@ -68,7 +68,7 @@ async function createRoomHandler(req, res) {
   for (const file of files) {
     try {
       const result = await cloudinary.uploader.upload(file.path, { folder: 'rooms', filename_override: file.originalname });
-      results.push({ imageName: result.original_filename, serviceUrl: result.public_id });
+      results.push({ imageName: result.original_filename, imageUrl: result.public_id });
     } catch (error) {
       return res.status(500).json(error);
     } finally {
@@ -112,7 +112,7 @@ async function updateRoomHandler(req, res) {
   for (const file of files) {
     try {
       const result = await cloudinary.uploader.upload(file.path, { folder: 'rooms', filename_override: file.originalname });
-      results.push({ imageName: result.original_filename, serviceUrl: result.public_id });
+      results.push({ imageName: result.original_filename, imageUrl: result.public_id });
     } catch (error) {
       return res.status(500).json(error);
     } finally {
