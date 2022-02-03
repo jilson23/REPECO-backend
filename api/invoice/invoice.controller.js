@@ -14,9 +14,20 @@ const {
   updateInvoice,
   createCardToken,
   createCustomer,
-  makePayment
+  makePayment,
+  getInvoicesByUser,
 } = require('./invoice.service');
 const { get } = require('lodash');
+
+async function getInvoicesByUserId(req, res) {
+  const id = req.user._id;
+  try {
+    const invoices = await getInvoicesByUser(id);
+    return res.status(200).json(invoices);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
 
 async function getAllInvoicesHandler(req, res) {
   try {
@@ -223,5 +234,6 @@ module.exports = {
   updateInvoiceHandler,
   createCardTokenHandlers,
   createCustomerHandlers,
-  makePaymentHandlers
+  makePaymentHandlers,
+  getInvoicesByUserId
 };

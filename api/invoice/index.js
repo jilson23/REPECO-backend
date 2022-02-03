@@ -9,13 +9,16 @@ const {
   updateInvoiceHandler,
   createCardTokenHandlers,
   createCustomerHandlers,
-  makePaymentHandlers
+  makePaymentHandlers,
+  getInvoicesByUserId,
 } = require('./invoice.controller');
 
 const router = Router();
 
 router.get('/', getAllInvoicesHandler);
 router.post('/', isAuthenticated(), createInvoiceHandler);
+router.get('/user-invoices', isAuthenticated(), getInvoicesByUserId)
+
 router.get('/:id', getInvoiceByIdHandler);
 router.delete('/:id', updateInvoiceHandler);
 router.patch('/:id', deleteInvoiceHandler);

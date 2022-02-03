@@ -1,6 +1,16 @@
 const Reserve = require('./reserve.model');
 
 /**
+ * Get reserves by user
+ * @returns reserves by user
+ */
+
+async function getReservesByUser(idUser) {
+  const reserves = await Reserve.find({ user: idUser }).populate({ path: 'room', populate: { path: 'hotel' } });
+  return reserves;
+}
+
+/**
  * Get all reserves
  * @returns all reserves
  */
@@ -63,4 +73,5 @@ module.exports = {
   getAllReserves,
   getReserveById,
   updateReserve,
+  getReservesByUser,
 };
