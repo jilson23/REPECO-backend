@@ -16,6 +16,7 @@ const {
   createCustomer,
   makePayment,
   getInvoicesByUser,
+  getInvoiceByIdAndUser
 } = require('./invoice.service');
 const { get } = require('lodash');
 
@@ -48,6 +49,21 @@ async function getInvoiceByIdHandler(req, res) {
     }
 
     return res.status(200).json(Invoice);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
+
+async function getInvoiceUserById(req, res) {
+  const user = req.user;
+  const { id } = req.params;
+  try {
+    const invoice = await getInvoiceByIdAndUser(id, user._id)
+    if (!invoice) {
+      return res.status(404).json({ message: `Invoice not found with id: ${id}` });
+    }
+
+    return res.status(200).json(invoice);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
@@ -185,6 +201,7 @@ async function makePaymentHandlers(req, res) {
 
       if (!customerId) {
         const { data } = await createCustomer(updatedUser, invoice.cardIndex);
+        console.log(data)
         await addBillingCustomerId(updatedUser, data.customerId);
       }
     }
@@ -235,5 +252,6 @@ module.exports = {
   createCardTokenHandlers,
   createCustomerHandlers,
   makePaymentHandlers,
-  getInvoicesByUserId
+  getInvoicesByUserId,
+  getInvoiceUserById
 };

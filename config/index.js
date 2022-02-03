@@ -6,7 +6,7 @@ const all = {
   // Server port
   port: process.env.PORT || 8080,
 
-  expiresIn: '2h',
+  expiresIn: '48h',
 
   // Should we populate the DB with sample data?
   seedDB: process.env.NODE_ENV !== 'production',
