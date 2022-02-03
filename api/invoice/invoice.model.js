@@ -49,9 +49,8 @@ const InvoiceSchema = new mongoose.Schema({
     ref: 'User',
     require: true
   },
-
 }, {
   timestamps: true,
-},)
+})
 
 module.exports = mongoose.model('Invoice', InvoiceSchema)
