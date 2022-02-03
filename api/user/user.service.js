@@ -65,7 +65,7 @@ async function updateUser(id, user) {
   //   if (err) throw err;
   //   doc.save();
   // });
-  const updatedUser = await User.findByIdAndUpdate(id, user, { new: true });
+  const updatedUser = await User.findByIdAndUpdate(id, user, { new: true }).populate({ path: 'cart.room', populate: { path: 'hotel' } });
   return updatedUser;
 }
 
