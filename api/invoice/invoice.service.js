@@ -10,6 +10,16 @@ const get = require('lodash/get');
 const Invoice = require('./invoice.model');
 
 /**
+ * Get all invoices by user id
+ * @returns all invoices
+ */
+
+async function getInvoicesByUser(idUser) {
+  const invoices = await Invoice.find({ user: idUser }).populate({ path: 'rooms', populate: { path: 'hotel' } });
+  return invoices;
+}
+
+/**
  * Get all invoices
  * @returns all invoices
  */
@@ -136,5 +146,6 @@ module.exports = {
   createCardToken,
   createCustomer,
   makePayment,
+  getInvoicesByUser,
   getInvoiceByIdAndUser
 };

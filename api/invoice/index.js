@@ -10,14 +10,17 @@ const {
   createCardTokenHandlers,
   createCustomerHandlers,
   makePaymentHandlers,
+  getInvoicesByUserId,
   getInvoiceUserById
 } = require('./invoice.controller');
 
 const router = Router();
 
 router.get('/', getAllInvoicesHandler);
-router.get('/user/:id', isAuthenticated(), getInvoiceUserById);
+router.get('/user-invoices', isAuthenticated(), getInvoicesByUserId)
 router.post('/', isAuthenticated(), createInvoiceHandler);
+router.get('/user/:id', isAuthenticated(), getInvoiceUserById);
+router.get('/:id', getInvoiceByIdHandler);
 router.delete('/:id', updateInvoiceHandler);
 router.patch('/:id', deleteInvoiceHandler);
 router.post('/card-token', isAuthenticated(), createCardTokenHandlers);
