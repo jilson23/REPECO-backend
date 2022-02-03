@@ -57,7 +57,13 @@ async function getReservesCountByHotelHandler(req, res) {
   try {
     const hotel = await findOneHotel(user._id)
     const reserves = await getAllReserves();
-    const reservesByHotel = reserves.filter(reserve => reserve.room.hotel.equals(hotel._id))
+    const reservesByHotel = reserves.filter(reserve => {
+      if (reserve.room) {
+        return String(reserve.room.hotel) === String(hotel._id)
+      } else {
+        return false
+      }
+    })
 
     const newArray = reservesByHotel.filter((value, index, self) =>
       index === self.findIndex((t) => (
