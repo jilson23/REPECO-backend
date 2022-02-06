@@ -11,7 +11,9 @@ const HotelSchema = new mongoose.Schema({
     enum: config.hotelCategory,
   },
   address: {
-    type: String,
+    street: {
+      type: String,
+    },
     city: {
       type: String
     },
@@ -36,13 +38,8 @@ const HotelSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-  },
-  rooms: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Room',
-    }
-  ]
+    require: true,
+  }
 })
 
 module.exports = mongoose.model('Hotel', HotelSchema)

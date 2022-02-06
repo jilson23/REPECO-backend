@@ -6,7 +6,7 @@ const Room = require('./room.model');
  */
 
 async function getAllRooms() {
-  const rooms = await Room.find();
+  const rooms = await Room.find().populate('hotel');
   return rooms;
 }
 
@@ -16,7 +16,17 @@ async function getAllRooms() {
  * @returns room
 */
 async function getRoomById(id) {
-  const room = await Room.findById(id);
+  const room = await Room.findById(id).populate('hotel');
+  return room;
+}
+
+/**
+ * Get room by hotel id
+ * @param {string} id Indentifier of the note to be filtered
+ * @returns room
+*/
+async function getRoomsByHotelId(ids) {
+  const room = await Room.find({ hotel: ids });
   return room;
 }
 
@@ -58,4 +68,5 @@ module.exports = {
   getAllRooms,
   getRoomById,
   updateRoom,
+  getRoomsByHotelId,
 };

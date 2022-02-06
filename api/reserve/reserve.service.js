@@ -1,12 +1,32 @@
 const Reserve = require('./reserve.model');
 
 /**
+ * Get reserves by user
+ * @returns reserves by user
+ */
+
+async function getReservesByUser(idUser) {
+  const reserves = await Reserve.find({ user: idUser }).populate({ path: 'room', populate: { path: 'hotel' } });
+  return reserves;
+}
+
+/**
  * Get all reserves
  * @returns all reserves
  */
 
 async function getAllReserves() {
-  const reserves = await Reserve.find();
+  const reserves = await Reserve.find().populate('room');
+  return reserves;
+}
+
+/**
+ * Get all reserves by hotel
+ * @returns all reserves
+ */
+
+async function getAllReservesByHotel(query) {
+  const reserves = await Reserve.find(query).populate('room');
   return reserves;
 }
 
@@ -19,6 +39,11 @@ async function getReserveById(id) {
   const reserve = await Reserve.findById(id);
   return reserve;
 }
+
+// async function getReserveByUser(user) {
+//   const reserves = await Reserve.find({ user });
+//   return reserves;
+// }
 
 /**
  * Create a new reserve
@@ -58,4 +83,6 @@ module.exports = {
   getAllReserves,
   getReserveById,
   updateReserve,
+  getReservesByUser,
+  getAllReservesByHotel,
 };

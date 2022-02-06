@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const { isAuthenticated, hasRole } = require('../../auth/auth.service');
 
 const {
   createReserveHandler,
@@ -6,13 +7,19 @@ const {
   getAllReservesHandler,
   getReserveByIdHandler,
   updateReserveHandler,
-} = require('./hotel.controller');
+  getUsersReserves,
+  getReservesCountByHotelHandler,
+} = require('./reserve.controller');
 
 const router = Router();
 
 router.get('/', getAllReservesHandler);
-router.post('/', createReserveHandler);
+router.get('/user/reserves', isAuthenticated(), getUsersReserves)
+router.get('/hotel/', hasRole(['hotel']), getReservesCountByHotelHandler);
+router.post('/', isAuthenticated(), createReserveHandler);
+router.get('/user/reserves', isAuthenticated(), getUsersReserves)
 router.get('/:id', getReserveByIdHandler);
+// router.get('/:id', getReserveByIdHandler);
 router.delete('/:id', updateReserveHandler);
 router.patch('/:id', deleteReserveHandler);
 

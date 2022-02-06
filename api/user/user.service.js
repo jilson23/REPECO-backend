@@ -1,4 +1,6 @@
+/* eslint-disable no-useless-catch */
 const User = require('./user.model');
+const get = require('lodash/get');
 
 /**
  * Get all users
@@ -8,6 +10,18 @@ const User = require('./user.model');
 async function getAllUsers() {
   const users = await User.find({}, '-password');
   return users;
+}
+
+/**
+ *
+ * @param {string} email email of use to identify user
+ * @returns user
+ */
+
+async function getUserByEmail(email) {
+  const user = await User.findOne({ email });
+
+  return user;
 }
 
 /**
@@ -26,7 +40,7 @@ async function getUserById(id) {
  * @returns user
 */
 async function findOneUser(query) {
-  const user = await User.findOne(query);
+  const user = await User.findOne(query).populate({ path: 'cart.room', populate: { path: 'hotel' } });
   return user;
 }
 
@@ -47,7 +61,11 @@ async function createUser(user) {
  * @returns user updated
  */
 async function updateUser(id, user) {
-  const updatedUser = await User.findByIdAndUpdate(id, user, { new: true });
+  // const updatedUser = await User.findByIdAndUpdate(id, user, { new: true }, function(err, doc) {
+  //   if (err) throw err;
+  //   doc.save();
+  // });
+  const updatedUser = await User.findByIdAndUpdate(id, user, { new: true }).populate({ path: 'cart.room', populate: { path: 'hotel' } });
   return updatedUser;
 }
 
@@ -61,11 +79,43 @@ async function deleteUser(id) {
   return deletedUser;
 }
 
+async function addBillingCards(user, card) {
+  const creditCards = get(user, 'billing.creditCards', []);
+  const customer = {
+    billing: {
+      creditCards: creditCards.concat(card),
+    },
+  };
+
+  const updatedUser = await User.findByIdAndUpdate(user._id, customer, {
+    new: true,
+  });
+  return updatedUser;
+}
+
+async function addBillingCustomerId(user, customerId) {
+  const creditCards = get(user, 'billing.creditCards', []);
+  const customer = {
+    billing: {
+      creditCards,
+      customerId
+    },
+  };
+
+  const updatedUser = await User.findByIdAndUpdate(user._id, customer, {
+    new: true,
+  });
+  return updatedUser;
+}
+
 module.exports = {
   createUser,
   deleteUser,
   getAllUsers,
   getUserById,
+  getUserByEmail,
   findOneUser,
   updateUser,
+  addBillingCards,
+  addBillingCustomerId
 };

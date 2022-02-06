@@ -3,6 +3,7 @@ const { Router } = require('express');
 const {
   loginUserHandler,
   changePasswordHandler,
+  verifyAccount,
 } = require('./local.controller');
 
 const router = Router();
@@ -13,6 +14,6 @@ const router = Router();
 router.post('/login', loginUserHandler);
 // router.post('/forgot-password', (req, res) => {});
 router.post('/change-password', changePasswordHandler);
-// router.post('/validate-email', (req, res) => {});
+router.post('/confirm-account/:hash', verifyAccount);
 
 module.exports = router;
