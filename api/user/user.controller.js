@@ -86,7 +86,7 @@ async function createUserHandler(req, res) {
       subject: 'Confirm account',
       template_id: 'd-97aa84e5f39e4a908f90bfedee154960',
       dynamic_template_data: {
-        url: 'http://localhost:3000/user/activate/' + hash,
+        url: 'https://repeco.netlify.app/user/activate/' + hash,
         email: user.email
       }
     }
